@@ -1,45 +1,24 @@
-let body = $response.body.replace(/while.{7}\n/, "");
+// Xoá prefix 'while (1) {}' nếu có
+let body = $response.body.replace(/while\s*\(1\)\s*\{\}\s*/, "");
+
+// Parse JSON
 let obj = JSON.parse(body);
 
-// Giả lập trạng thái người dùng là Pro (subscriber)
-obj.entitlement = {
-  status: "subscriber",
-  storage: {
-    used: 0,
-    limit: 1154487209165,
-    display_limit: 1099511627776,
-    warn: 992137445376
-  }
-};
+// Sửa trạng thái thành 'subscriber'
+if (obj.entitlement) {
+  obj.entitlement.status = "subscriber";
 
-// Giả lập thông tin subscription hiện tại
-obj.current_subs = {
-  product_id: "lightroom",
-  store: "adobe",
-  purchase_date: "2019-10-10T16:32:10.254Z",
-  sao: {
-    inpkg_CCES: "0",
-    inpkg_CCLE: "1",
-    inpkg_CCSN: "0",
-    inpkg_CCSV: "0",
-    inpkg_LCCC: "0",
-    inpkg_LPES: "0",
-    inpkg_LRBRL: "0",
-    inpkg_LRMAC: "0",
-    inpkg_LRMC: "0",
-    inpkg_LRMP: "0",
-    inpkg_LRTB: "0",
-    inpkg_PHLT: "0",
-    inpkg_PHLT2: "0",
-    inpkg_PLES: "0",
-    storage_quota: "100"
-  }
-};
+  // Tăng giới hạn bộ nhớ (tuỳ chọn)
+  obj.entitlement.storage.limit = 1099511627776;         // 1 TB
+  obj.entitlement.storage.display_limit = 1099511627776;
+  obj.entitlement.storage.warn = 992137445376;           // 925 GB
+}
 
-// Avatar placeholder để tránh lỗi giao diện
-obj.avatar = {
-  placeholder: true
-};
+// (Tuỳ chọn) Giữ avatar nếu cần
+obj.avatar = { placeholder: true };
 
+// Convert lại thành JSON
 body = JSON.stringify(obj);
+
+// Trả kết quả về cho Shadowrocket
 $done({ body });
