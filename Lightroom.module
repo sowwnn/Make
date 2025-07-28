@@ -1,6 +1,10 @@
 [MITM]
-hostname = %APPEND% photos.adobe.io, abp-profile-service.adobe.io
+hostname = %APPEND%
+    photos.adobe.io,
+    abp-profile-service.adobe.io,
+    ais.adobe.io
 
 [Script]
 LightRoom1 = type=http-response,pattern=^https:\/\/photos\.adobe\.io\/v2\/accounts\/.*,requires-body=1,script-path=https://raw.githubusercontent.com/sowwnn/Make/refs/heads/crack/Lightroom1.js
 LightRoom2 = type=http-response,pattern=^https:\/\/abp-profile-service\.adobe\.io\/abp_profile\/v1,requires-body=1,script-path=https://raw.githubusercontent.com/sowwnn/Make/refs/heads/crack/Lightroom2.js
+LightRoom3 = type=http-response,pattern=^https:\/\/ais\.adobe\.io\/ais\/v3\/products\?app_id=com\.adobe\.lrmobile.*,requires-body=1,script-path=https://raw.githubusercontent.com/sowwnn/Make/refs/heads/crack/Lightroom3.js
